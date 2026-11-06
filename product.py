@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from supplier import Supplier
 
 class CanBeShipped(ABC):
     """Interface for products that require physical shipping."""
@@ -7,11 +8,12 @@ class CanBeShipped(ABC):
         pass
 
 class Product(ABC):
-    def __init__(self, product_id, name, price, stock):
-        self._product_id = product_id
-        self._name = name
-        self._price = float(price)
-        self._stock = int(stock)
+    def __init__(self, product_id: str, name: str, price: float, stock: int, supplier: Supplier) -> None:
+        self._product_id: str = product_id
+        self._name: str = name
+        self._price: float = float(price)
+        self._stock: int = int(stock)
+        self._supplier: Supplier = supplier
 
     @property
     def product_id(self):
@@ -52,9 +54,9 @@ class Product(ABC):
 
 class PhysicalProduct(Product, CanBeShipped):
     """A physical product that has weight and can be shipped."""
-    def __init__(self, product_id, name, price, stock, weight):
-        super().__init__(product_id, name, price, stock)
-        self._weight = float(weight)
+    def __init__(self, product_id: str, name: str, price: float, stock: int, supplier: Supplier, weight: float) -> None:
+        super().__init__(product_id, name, price, stock, supplier)
+        self._weight: float = float(weight)
 
     @property
     def weight(self):
@@ -78,9 +80,9 @@ class PhysicalProduct(Product, CanBeShipped):
 
 class DigitalProduct(Product):
     """A digital product delivered via download size."""
-    def __init__(self, product_id, name, price, stock, download_size):
-        super().__init__(product_id, name, price, stock)
-        self._download_size = float(download_size)
+    def __init__(self, product_id: str, name: str, price: float, stock: int, supplier: Supplier, download_size: float) -> None:
+        super().__init__(product_id, name, price, stock, supplier)
+        self._download_size: float = float(download_size)
 
     @property
     def download_size(self):
