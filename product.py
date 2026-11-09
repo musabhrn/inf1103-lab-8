@@ -49,7 +49,12 @@ class Product(ABC):
             "id": self._product_id,
             "name": self._name,
             "price": self._price,
-            "stock": self._stock
+            "stock": self._stock,
+            "supplier": {
+                "supplier_id": self._supplier.supplier_id if self._supplier else None,
+                "name": self._supplier.name if self._supplier else None,
+                "contact_email": self._supplier.contact_email if self._supplier else None
+            }
         }
 
 class PhysicalProduct(Product, CanBeShipped):
