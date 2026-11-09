@@ -36,9 +36,10 @@ class Product(ABC):
 
     def display_information(self) -> None:
         """Displays formatted information for the product."""
-        print(f"ID: {self._product_id} | Name: {self._name} | Price: ${self._price:.2f} | Stock: {self._stock}", end="")
+        print(f"ID: {self.product_id} | Name: {self.name} | Price: ${self.price:.2f} | Stock: {self.stock}", end="")
         if self._supplier:
-            print(f" | Supplier: {self._supplier.name} (ID: {self._supplier.supplier_id}, Email: {self._supplier.contact_email})")
+            print(" | Supplier -> ", end="")
+            self._supplier.display_information()
         else:
             print(" | Supplier: None")
 
