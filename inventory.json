@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "id": "P001",
+        "name": "Self Help Ebook",
+        "price": 12.0,
+        "stock": 40,
+        "supplier": {
+            "supplier_id": "S001",
+            "name": "Pixel Art Publisher",
+            "contact_email": "pixelart@mail.com"
+        },
+        "type": "digital",
+        "download_size": 100.0
+    }
+]

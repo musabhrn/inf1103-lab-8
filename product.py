@@ -37,6 +37,10 @@ class Product(ABC):
     def display_information(self) -> None:
         """Displays formatted information for the product."""
         print(f"ID: {self._product_id} | Name: {self._name} | Price: ${self._price:.2f} | Stock: {self._stock}", end="")
+        if self._supplier:
+            print(f" | Supplier: {self._supplier.name} (ID: {self._supplier.supplier_id}, Email: {self._supplier.contact_email})")
+        else:
+            print(" | Supplier: None")
 
     @abstractmethod
     def get_fulfilment_info(self) -> str:
@@ -98,7 +102,7 @@ class DigitalProduct(Product):
 
     def display_information(self) -> None:
         super().display_information()
-        print(f" | Download Size: {self._download_size}MB | Fulfilment: {self.get_fulfilment_info()}")
+        print(f"| Download Size: {self._download_size}MB | Fulfilment: {self.get_fulfilment_info()}")
 
     def to_dict(self) -> dict:
         base = super().to_dict()
