@@ -75,6 +75,7 @@ class InventoryManager:
     def display_all(self) -> None:
         if not self._products:
             print("No products in inventory.")
+            print()
         else:
             for product in self._products:
                 product.display_information()
