@@ -19,8 +19,9 @@ def main():
         print("2. Add Product")
         print("3. Update Stock")
         print("4. Search Product")
-        print("5. Save Inventory")
-        print("6. Exit")
+        print("5. Remove Product")
+        print("6. Save Inventory")
+        print("7. Exit")
         print("--------------------\n")
 
         option = input("Enter option: ").strip()
@@ -31,14 +32,14 @@ def main():
 
         elif option == "2":
             prod_type = input("Enter product type (physical/digital): ").strip().lower()
-            p_id = input("Enter Product ID: ")
-            name = input("Enter Name: ")
+            p_id = input("Enter Product ID: ").strip()
+            name = input("Enter Name: ").strip()
             price = float(input("Enter Price: "))
             stock = int(input("Enter Stock: "))
             
-            sup_id = input("Enter Supplier ID: ")
-            sup_name = input("Enter Supplier Name: ")
-            sup_email = input("Enter Supplier Email: ")
+            sup_id = input("Enter Supplier ID: ").strip()
+            sup_name = input("Enter Supplier Name: ").strip()
+            sup_email = input("Enter Supplier Email: ").strip()
             supplier = Supplier(sup_id, sup_name, sup_email)
 
             if prod_type == "physical":
@@ -46,7 +47,7 @@ def main():
                 product = PhysicalProduct(p_id, name, price, stock, supplier, weight)
             elif prod_type == "digital":
                 download_size = float(input("Enter Download Size (MB): "))
-                product = DigitalProduct(p_id, name, price, stock, supplier download_size)
+                product = DigitalProduct(p_id, name, price, stock, supplier, download_size)
             else:
                 print("Invalid type. Defaulting to physical product.")
                 product = PhysicalProduct(p_id, name, price, stock, supplier, 0.0)
@@ -57,19 +58,28 @@ def main():
             manager.update_stock()
 
         elif option == "4":
-            product_id = input("Enter Product ID to search: ").strip()
-    
-            product = manager.find_product(product_id)
-            
+            p_id = input("Enter Product ID to search: ").strip()
+            product = manager.find_product(p_id)
             if product:
+                print("Product Found:")
                 product.display_information()
-                print()
+                print("\n")
             else:
-                print("Product not found.\n")
-            
+                print(f"Product ID '{p_id}' not found.\n")
+
         elif option == "5":
-            manager.save()
+            p_id = input("Enter Product ID to remove: ").strip()
+
+            success = manager.remove_product(p_id)
+            if success:
+                print(f"Product ID '{p_id}' removed from inventory successfully.\n")
+            else:
+                print(f"Product ID '{p_id}' not found in inventory.\n")
+            
         elif option == "6":
+            manager.save()
+
+        elif option == "7":
             print("Saving inventory before exit...")
             manager.save()
             print("Thank you for using Inventory Management System.")
