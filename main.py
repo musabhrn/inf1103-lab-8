@@ -53,9 +53,18 @@ def main():
                 product = PhysicalProduct(p_id, name, price, stock, supplier, 0.0)
 
             manager.add_product(product)
+            print(f"Product '{product.name}' added successfully to inventory.\n")
 
         elif option == "3":
-            manager.update_stock()
+            p_id = input("Enter Product ID to update: ").strip()
+            try:
+                quantity = int(input("Enter new stock quantity: "))
+                if manager.update_stock(p_id, quantity):
+                    print("Stock updated successfully!\n")
+                else:
+                    print(f"Product ID '{p_id}' not found.\n")
+            except ValueError:
+                print("Invalid quantity. Please enter a valid integer.\n")
 
         elif option == "4":
             p_id = input("Enter Product ID to search: ").strip()
@@ -78,6 +87,7 @@ def main():
             
         elif option == "6":
             manager.save()
+            print("Inventory saved to file successfully.\n")
 
         elif option == "7":
             print("Saving inventory before exit...")
