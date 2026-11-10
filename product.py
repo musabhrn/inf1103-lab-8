@@ -31,6 +31,12 @@ class Product(ABC):
     def stock(self):
         return self._stock
 
+    @stock.setter
+    def stock(self, value: int) -> None:
+        if value < 0:
+            raise ValueError("Stock cannot be negative.")
+        self._stock = value
+
     def update_stock(self, quantity: int) -> None:
         self._stock = quantity
 

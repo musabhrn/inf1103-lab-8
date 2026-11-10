@@ -1,6 +1,7 @@
 from inventory_manager import InventoryManager
 from product import PhysicalProduct, DigitalProduct
 from supplier import Supplier
+from order import Order
 
 def display_menu():
     print("=" * 35)
@@ -20,8 +21,9 @@ def main():
         print("3. Update Stock")
         print("4. Search Product")
         print("5. Remove Product")
-        print("6. Save Inventory")
-        print("7. Exit")
+        print("6. Create Order")
+        print("7. Save Inventory")
+        print("8. Exit")
         print("--------------------\n")
 
         option = input("Enter option: ").strip()
@@ -84,12 +86,43 @@ def main():
                 print(f"Product ID '{p_id}' removed from inventory successfully.\n")
             else:
                 print(f"Product ID '{p_id}' not found in inventory.\n")
-            
+                
         elif option == "6":
+            order_id = input("Enter Order ID: ").strip()
+            order = Order(order_id)
+            
+            p_id = input("Enter Product ID to add to order: ").strip()
+            product = manager.find_product(p_id)
+            
+            if not product:
+                print(f"Product ID '{p_id}' not found.\n")
+            else:
+                try:
+                    qty = int(input(f"Enter quantity for {product.name} (Stock available: {product.stock}): "))
+                    if qty > product.stock:
+                        print("Error: Requested quantity exceeds current stock!\n")
+                    else:
+                        # Add line, reduce stock, and print receipt all in one go
+                        order.add_order_line(product, qty)
+                        product.stock -= qty
+                        
+                        print("\n" + "=" * 30)
+                        print(f"ORDER RECEIPT: {order.order_id}")
+                        print("=" * 30)
+                        for line in order.order_lines:
+                            print(f"- {line.product.name} x {line.quantity} = ${line.calculate_subtotal():.2f}")
+                        print("-" * 30)
+                        print(f"Grand Total: ${order.calculate_total():.2f}")
+                        print("=" * 30 + "\n")
+                        
+                except ValueError:
+                    print("Invalid quantity. Please enter a valid integer.\n")
+            
+        elif option == "7":
             manager.save()
             print("Inventory saved to file successfully.\n")
 
-        elif option == "7":
+        elif option == "8":
             print("Saving inventory before exit...")
             manager.save()
             print("Thank you for using Inventory Management System.")
