@@ -54,7 +54,7 @@ class Product(ABC):
         """Abstract method forcing subclasses to define fulfilment behavior."""
         pass
     
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """Convert Product object back to a dictionary for JSON storage."""
         return {
             "id": self._product_id,
