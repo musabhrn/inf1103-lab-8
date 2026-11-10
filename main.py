@@ -91,32 +91,39 @@ def main():
             order_id = input("Enter Order ID: ").strip()
             order = Order(order_id)
             
-            p_id = input("Enter Product ID to add to order: ").strip()
-            product = manager.find_product(p_id)
-            
-            if not product:
-                print(f"Product ID '{p_id}' not found.\n")
+            while True:
+                p_id = input("Enter Product ID to add to order: ").strip()
+                product = manager.find_product(p_id)
+                
+                if not product:
+                    print(f"Product ID '{p_id}' not found.\n")
+                else:
+                    try:
+                        qty = int(input(f"Enter quantity for {product.name} (Stock available: {product.stock}): "))
+                        if qty > product.stock:
+                            print("Error: Requested quantity exceeds current stock!\n")
+                        else:
+                            order.add_order_line(product, qty)
+                            product.stock -= qty
+                            print(f"Added {qty}x {product.name} to order.\n")
+                    except ValueError:
+                        print("Invalid quantity. Please enter a valid integer.\n")
+                
+                cont = input("Add another product to this order? (y/n): ").strip().lower()
+                if cont != 'y':
+                    break
+
+            if order.order_lines:
+                print("\n" + "=" * 30)
+                print(f"ORDER RECEIPT: {order.order_id}")
+                print("=" * 30)
+                for line in order.order_lines:
+                    print(f"- {line.product.name} x {line.quantity} = ${line.calculate_subtotal():.2f}")
+                print("-" * 30)
+                print(f"Grand Total: ${order.calculate_total():.2f}")
+                print("=" * 30 + "\n")
             else:
-                try:
-                    qty = int(input(f"Enter quantity for {product.name} (Stock available: {product.stock}): "))
-                    if qty > product.stock:
-                        print("Error: Requested quantity exceeds current stock!\n")
-                    else:
-                        # Add line, reduce stock, and print receipt all in one go
-                        order.add_order_line(product, qty)
-                        product.stock -= qty
-                        
-                        print("\n" + "=" * 30)
-                        print(f"ORDER RECEIPT: {order.order_id}")
-                        print("=" * 30)
-                        for line in order.order_lines:
-                            print(f"- {line.product.name} x {line.quantity} = ${line.calculate_subtotal():.2f}")
-                        print("-" * 30)
-                        print(f"Grand Total: ${order.calculate_total():.2f}")
-                        print("=" * 30 + "\n")
-                        
-                except ValueError:
-                    print("Invalid quantity. Please enter a valid integer.\n")
+                print("Order was empty. No items processed.\n")
             
         elif option == "7":
             manager.save()
